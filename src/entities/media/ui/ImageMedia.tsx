@@ -81,9 +81,6 @@ export function ImageMedia({ item, width, visibility, deferMedia }: ImageMediaPr
     }
 
     mediaLayer.replaceChildren(image);
-    return () => {
-      image.remove();
-    };
   }, [bucket, canRequestImage, fetchPriority, item, srcSet, width]);
 
   if (!canRequestImage) {
