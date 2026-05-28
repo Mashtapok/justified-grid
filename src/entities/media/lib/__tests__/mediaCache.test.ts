@@ -1,43 +1,33 @@
-// @vitest-environment jsdom
-
 import { describe, expect, it } from 'vitest';
 import { mediaCache } from '../mediaCache';
 
 describe('mediaCache', () => {
-  it('returns a retained decoded element for recent media', () => {
-    const image = document.createElement('img');
-    mediaCache.remember('recent-image', 'sm', image, 1);
+  it('tracks a loaded bucket', () => {
+    mediaCache.rememberLoadedBucket('recent-image', 'sm');
 
     expect(mediaCache.getLoadedBucket('recent-image')).toBe('sm');
-    expect(mediaCache.takeDecodedElement('recent-image', 'sm')).toBe(image);
   });
 
-  it('retains loaded bucket metadata after decoded media is evicted', () => {
-    const oversized = document.createElement('img');
-    mediaCache.remember('evicted-image', 'lg', oversized, 0.01);
+  it('upgrades to a larger loaded bucket', () => {
+    mediaCache.rememberLoadedBucket('upgraded-image', 'sm');
+    mediaCache.rememberLoadedBucket('upgraded-image', 'lg');
 
-    expect(mediaCache.getLoadedBucket('evicted-image')).toBe('lg');
-    expect(mediaCache.takeDecodedElement('evicted-image', 'lg')).toBeUndefined();
+    expect(mediaCache.getLoadedBucket('upgraded-image')).toBe('lg');
   });
 
-  it('tracks a loaded poster without retaining a decoded node', () => {
-    mediaCache.rememberLoadedBucket('video-poster', 'sm');
+  it('keeps a larger loaded bucket when a smaller bucket finishes later', () => {
+    mediaCache.rememberLoadedBucket('stable-image', 'md');
+    mediaCache.rememberLoadedBucket('stable-image', 'thumb');
 
-    expect(mediaCache.getLoadedBucket('video-poster')).toBe('sm');
-    expect(mediaCache.takeDecodedElement('video-poster', 'sm')).toBeUndefined();
+    expect(mediaCache.getLoadedBucket('stable-image')).toBe('md');
   });
 
-  it('bounds loaded bucket metadata and falls back to retained decoded media', () => {
-    const image = document.createElement('img');
-    mediaCache.remember('retained-after-metadata-eviction', 'sm', image, 1000);
-
+  it('bounds loaded bucket metadata', () => {
     for (let index = 0; index < 10_050; index += 1) {
       mediaCache.rememberLoadedBucket(`bounded-poster-${index}`, 'thumb');
     }
 
     expect(mediaCache.getLoadedBucket('bounded-poster-0')).toBeUndefined();
     expect(mediaCache.getLoadedBucket('bounded-poster-10049')).toBe('thumb');
-    expect(mediaCache.getLoadedBucket('retained-after-metadata-eviction')).toBe('sm');
-    expect(mediaCache.takeDecodedElement('retained-after-metadata-eviction', 'sm')).toBe(image);
   });
 });

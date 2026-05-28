@@ -10,7 +10,7 @@ describe('pickBucket', () => {
     expect(pickBucket(961)).toBe('lg');
   });
 
-  it('reuses an already-decoded larger source', () => {
+  it('reuses an already-loaded larger source', () => {
     expect(pickBucket(200, 'lg')).toBe('lg');
   });
 });

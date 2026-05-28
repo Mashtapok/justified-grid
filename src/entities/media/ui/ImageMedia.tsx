@@ -1,4 +1,3 @@
-import { useEffect, useRef } from 'react';
 import type { ImageItem } from '@/entities/media/model/types';
 import { mediaCache } from '@/entities/media/lib/mediaCache';
 import { BUCKET_WIDTHS, pickBucket } from '@/entities/media/lib/pickBucket';
@@ -15,7 +14,6 @@ interface ImageMediaProps {
 }
 
 export function ImageMedia({ item, width, visibility, deferMedia }: ImageMediaProps) {
-  const mediaLayerRef = useRef<HTMLDivElement>(null);
   const cachedBucket = mediaCache.getLoadedBucket(item.id);
   const bucket = pickBucket(width, cachedBucket);
   const canRequestImage = visibility !== 'far' && (!deferMedia || cachedBucket !== undefined);
@@ -29,59 +27,9 @@ export function ImageMedia({ item, width, visibility, deferMedia }: ImageMediaPr
   const srcSet = Object.entries(item.srcset)
     .map(([size, source]) => `${source} ${BUCKET_WIDTHS[size as keyof typeof BUCKET_WIDTHS]}w`)
     .join(', ');
+  const src = item.srcset[bucket];
+  const sizes = `${Math.round(width)}px`;
   const fetchPriority = visibility === 'visible' ? 'high' : 'low';
-
-  useEffect(() => {
-    const mediaLayer = mediaLayerRef.current;
-    if (mediaLayer === null || !canRequestImage) {
-      return;
-    }
-
-    const src = item.srcset[bucket];
-    const sizes = `${Math.round(width)}px`;
-    const loadedBucket = mediaCache.getLoadedBucket(item.id);
-
-    // Reuse decoded <img> elements so returning cells avoid a second decode.
-    let image = mediaCache.takeDecodedElement(item.id, bucket);
-    if (image === undefined) {
-      const existing = mediaLayer.querySelector('img');
-      if (
-        existing instanceof HTMLImageElement &&
-        loadedBucket !== undefined &&
-        BUCKET_WIDTHS[loadedBucket] >= BUCKET_WIDTHS[bucket]
-      ) {
-        image = existing;
-      } else {
-        const newImage = document.createElement('img');
-        image = newImage;
-        newImage.src = src;
-        newImage.srcset = srcSet;
-        newImage.sizes = sizes;
-        newImage.addEventListener(
-          'load',
-          () => {
-            mediaCache.remember(item.id, bucket, newImage, item.width / item.height);
-          },
-          { once: true },
-        );
-      }
-    }
-
-    image.className = styles.media ?? '';
-    image.alt = '';
-    image.draggable = false;
-    image.decoding = 'async';
-    image.loading = 'lazy';
-    image.fetchPriority = fetchPriority;
-    if (image.srcset !== srcSet) {
-      image.srcset = srcSet;
-    }
-    if (image.sizes !== sizes) {
-      image.sizes = sizes;
-    }
-
-    mediaLayer.replaceChildren(image);
-  }, [bucket, canRequestImage, fetchPriority, item, srcSet, width]);
 
   if (!canRequestImage) {
     return <div className={styles.placeholder} aria-hidden="true" />;
@@ -95,7 +43,22 @@ export function ImageMedia({ item, width, visibility, deferMedia }: ImageMediaPr
       {shouldShowBlurPreview && item.blurhash !== undefined ? (
         <BlurhashPreview blurhash={item.blurhash} width={item.width} height={item.height} />
       ) : null}
-      <div ref={mediaLayerRef} className={styles.mediaLayer} />
+      <div className={styles.mediaLayer}>
+        <img
+          className={styles.media}
+          src={src}
+          srcSet={srcSet}
+          sizes={sizes}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          draggable={false}
+          fetchPriority={fetchPriority}
+          onLoad={() => {
+            mediaCache.rememberLoadedBucket(item.id, bucket);
+          }}
+        />
+      </div>
     </div>
   );
 }
