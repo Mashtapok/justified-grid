@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 
-export function useLayoutDensity(initialTargetItemsPerRow = 3) {
+export function useLayoutDensity(initialTargetItemsPerRow = 4) {
   const [targetItemsPerRow, setTargetItemsPerRow] = useState(initialTargetItemsPerRow);
   const [animateLayout, setAnimateLayout] = useState(false);
   const animationTimerRef = useRef<number | undefined>(undefined);
