@@ -1,0 +1,80 @@
+.cell {
+  position: absolute;
+  inset: 0 auto auto 0;
+  overflow: hidden;
+  border-radius: 3px;
+  background: var(--surface);
+  contain: layout paint style;
+}
+
+.media,
+.video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mediaHost {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  background: var(--surface);
+}
+
+.mediaLayer,
+.blurPreview {
+  position: absolute;
+  inset: 0;
+}
+
+.mediaLayer {
+  width: 100%;
+  height: 100%;
+}
+
+.blurPreview {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.placeholder {
+  width: 100%;
+  height: 100%;
+  background: var(--surface);
+}
+
+.videoSurface {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  outline: none;
+}
+
+.videoSurface:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+
+.video {
+  position: absolute;
+  inset: 0;
+}
+
+.playIcon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 32px;
+  height: 32px;
+  opacity: 1;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 1px 3px rgba(8, 9, 12, 0.5));
+  pointer-events: none;
+}
+
+.playIconHidden {
+  opacity: 0;
+}
