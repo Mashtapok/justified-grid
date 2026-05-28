@@ -32,7 +32,7 @@ pnpm gen:dataset:unsplash:cache # requires .cache/unsplash-photos.json
 - **S1 - Smooth column-count transition:** cell positions animate on GPU during density changes, with reduced-motion support.
 - **S2 - Fast-scroll grace:** high scroll velocity temporarily renders newly entering cells as plain placeholders, then catches up after scrolling slows or stops.
 - **S3 - Animation-friendly media cache:** loaded image bucket state survives virtualization, and decoded image elements are retained in a bounded weighted LRU so returning cells avoid unnecessary reload/decode work.
-- **S4 - Right-sized media:** image requests are selected from width buckets (`320`, `640`, `1280`, `1920`) based on rendered cell width and device pixel ratio. If a larger bucket was already loaded, it is reused instead of downgrading.
+- **S4 - Right-sized media:** image requests are selected from width buckets (`160`, `320`, `640`, `960`, `1280`) based on rendered cell width. If a larger bucket was already loaded, it is reused instead of downgrading.
 - **S5 - Robust resize:** resize and scroll measurements are batched with `requestAnimationFrame`, and the virtualizer is remeasured after layout changes.
 - **S6 - Live-data ergonomics:** the `Generate more` button prepends 1-5 mocked items with stable generated IDs. Scroll anchoring keeps the reader on the same item after prepend.
 

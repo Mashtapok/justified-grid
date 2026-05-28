@@ -8,7 +8,7 @@ function image(id: string, width: number, height: number): MediaItem {
     type: 'image',
     width,
     height,
-    srcset: { thumb: id, sm: id, lg: id, xl: id },
+    srcset: { xs: id, thumb: id, sm: id, md: id, lg: id },
   };
 }
 

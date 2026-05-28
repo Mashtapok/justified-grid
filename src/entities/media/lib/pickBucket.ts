@@ -1,21 +1,17 @@
 import type { SizeBucket } from '@/entities/media/model/types';
 
 export const BUCKET_WIDTHS: Record<SizeBucket, number> = {
+  xs: 160,
   thumb: 320,
   sm: 640,
+  md: 960,
   lg: 1280,
-  xl: 1920,
 };
 
 const ORDER = Object.keys(BUCKET_WIDTHS) as SizeBucket[];
 
-export function pickBucket(
-  cssWidth: number,
-  dpr: number,
-  alreadyLoadedLarger?: SizeBucket,
-): SizeBucket {
-  const requiredWidth = cssWidth * Math.max(1, dpr);
-  const selected = ORDER.find((bucket) => BUCKET_WIDTHS[bucket] >= requiredWidth) ?? 'xl';
+export function pickBucket(cssWidth: number, alreadyLoadedLarger?: SizeBucket): SizeBucket {
+  const selected = ORDER.find((bucket) => BUCKET_WIDTHS[bucket] >= cssWidth) ?? 'lg';
 
   if (
     alreadyLoadedLarger !== undefined &&

@@ -49,14 +49,10 @@ export function VideoMedia({ item, width, visibility, deferMedia }: VideoMediaPr
   const hoverIntentTimerRef = useRef<number | undefined>(undefined);
   const posterCacheId = `${item.id}:poster`;
   const cachedPosterBucket = mediaCache.getLoadedBucket(posterCacheId);
-  const dpr = typeof window === 'undefined' ? 1 : window.devicePixelRatio;
-  const posterBucket = pickBucket(width, dpr, cachedPosterBucket);
+  const posterBucket = pickBucket(width, cachedPosterBucket);
   const hasLoadedPoster = cachedPosterBucket !== undefined;
   const canRequestPoster = visibility !== 'far' && (!deferMedia || hasLoadedPoster);
   const posterSrc = posterWithWidth(item.poster, BUCKET_WIDTHS[posterBucket]);
-  const posterSrcSet = Object.values(BUCKET_WIDTHS)
-    .map((bucketWidth) => `${posterWithWidth(item.poster, bucketWidth)} ${bucketWidth}w`)
-    .join(', ');
 
   const stopPlayback = useCallback(() => {
     window.clearTimeout(hoverIntentTimerRef.current);
@@ -168,10 +164,8 @@ export function VideoMedia({ item, width, visibility, deferMedia }: VideoMediaPr
         <img
           className={styles.media}
           src={posterSrc}
-          srcSet={posterSrcSet}
-          sizes={`${Math.round(width)}px`}
           alt=""
-          loading="eager"
+          loading="lazy"
           decoding="async"
           draggable={false}
           onLoad={() => {

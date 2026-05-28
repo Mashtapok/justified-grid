@@ -18,7 +18,7 @@ export function useVirtualFeed(
       const row = layout.rows[index];
       return row === undefined ? 0 : row.height + (isLast ? 0 : gap);
     },
-    overscan: 4,
+    overscan: 2,
     useFlushSync: false,
   });
 

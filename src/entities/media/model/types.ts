@@ -1,4 +1,4 @@
-export const SIZE_BUCKETS = ['thumb', 'sm', 'lg', 'xl'] as const;
+export const SIZE_BUCKETS = ['xs', 'thumb', 'sm', 'md', 'lg'] as const;
 
 export type SizeBucket = (typeof SIZE_BUCKETS)[number];
 

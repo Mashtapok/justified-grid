@@ -17,8 +17,7 @@ interface ImageMediaProps {
 export function ImageMedia({ item, width, visibility, deferMedia }: ImageMediaProps) {
   const mediaLayerRef = useRef<HTMLDivElement>(null);
   const cachedBucket = mediaCache.getLoadedBucket(item.id);
-  const dpr = typeof window === 'undefined' ? 1 : window.devicePixelRatio;
-  const bucket = pickBucket(width, dpr, cachedBucket);
+  const bucket = pickBucket(width, cachedBucket);
   const canRequestImage = visibility !== 'far' && (!deferMedia || cachedBucket !== undefined);
   const hasLoadedRequestedBucket =
     cachedBucket !== undefined && BUCKET_WIDTHS[cachedBucket] >= BUCKET_WIDTHS[bucket];
@@ -72,7 +71,7 @@ export function ImageMedia({ item, width, visibility, deferMedia }: ImageMediaPr
     image.alt = '';
     image.draggable = false;
     image.decoding = 'async';
-    image.loading = 'eager';
+    image.loading = 'lazy';
     image.fetchPriority = fetchPriority;
     if (image.srcset !== srcSet) {
       image.srcset = srcSet;

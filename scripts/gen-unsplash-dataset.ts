@@ -15,10 +15,11 @@ const VIDEO_COUNT = ITEM_COUNT - IMAGE_COUNT;
 const UNSPLASH_PAGE_SIZE = 30;
 const UNSPLASH_API_ROOT = 'https://api.unsplash.com';
 const BUCKET_WIDTHS: Record<SizeBucket, number> = {
+  xs: 160,
   thumb: 320,
   sm: 640,
+  md: 960,
   lg: 1280,
-  xl: 1920,
 };
 const COVERR_VIDEO_ROOT = 'https://cdn.coverr.co/videos';
 const VIDEO_POOL = [

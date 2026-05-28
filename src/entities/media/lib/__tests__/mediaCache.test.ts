@@ -14,10 +14,10 @@ describe('mediaCache', () => {
 
   it('retains loaded bucket metadata after decoded media is evicted', () => {
     const oversized = document.createElement('img');
-    mediaCache.remember('evicted-image', 'xl', oversized, 0.01);
+    mediaCache.remember('evicted-image', 'lg', oversized, 0.01);
 
-    expect(mediaCache.getLoadedBucket('evicted-image')).toBe('xl');
-    expect(mediaCache.takeDecodedElement('evicted-image', 'xl')).toBeUndefined();
+    expect(mediaCache.getLoadedBucket('evicted-image')).toBe('lg');
+    expect(mediaCache.takeDecodedElement('evicted-image', 'lg')).toBeUndefined();
   });
 
   it('tracks a loaded poster without retaining a decoded node', () => {

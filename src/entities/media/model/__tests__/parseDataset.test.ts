@@ -10,10 +10,11 @@ describe('parseDataset', () => {
         width: 640,
         height: 480,
         srcset: {
+          xs: '/xs',
           thumb: '/thumb',
           sm: '/sm',
+          md: '/md',
           lg: '/lg',
-          xl: '/xl',
         },
       },
       {
