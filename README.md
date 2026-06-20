@@ -18,8 +18,6 @@ UNSPLASH_ACCESS_KEY=... pnpm gen:dataset:unsplash
 pnpm gen:dataset:unsplash:cache # requires .cache/unsplash-photos.json
 ```
 
-## Screencast https://youtu.be/0n6h9mFi6cM
-
 ## What's Done
 
 ### All required items are implemented:
